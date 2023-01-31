@@ -1,0 +1,77 @@
+create database poslovnice;
+use poslovnice;
+drop table napitci,hrana,odjeca,radnja;
+
+create table napitci(
+id int PRIMARY KEY,
+ime varchar(255),
+datum_isteka date,
+datum_proizvodnje date,
+cijena double,
+kolicina int8,
+vrsta_tekucine varchar(255)
+);
+
+create table hrana(
+id int PRIMARY KEY,
+ime varchar(255),
+domace boolean,
+proizvodjac varchar(255),
+datum_isteka date,
+datum_proizvodnje date,
+cijena int8,
+kolicina int8
+);
+
+create table odjeca(
+id int PRIMARY KEY,
+marka varchar(255),
+boja varchar(255),
+velicina varchar(255),
+materijal varchar(255),
+vrsta_odjece varchar(255),
+cijena double,
+kolicina int8,
+mjesto_porijekla varchar(255)
+);
+
+create table radnja (
+id int PRIMARY KEY,
+fk_napitci int,
+fk_odjeca int,
+fk_hrana int,
+poslovni_prostor varchar(255),
+FOREIGN KEY (fk_napitci) REFERENCES napitci(id),
+FOREIGN KEY (fk_odjeca) REFERENCES odjeca(id),
+FOREIGN KEY (fk_hrana) REFERENCES hrana(id)
+);
+
+
+INSERT INTO napitci(id, ime, datum_isteka, datum_proizvodnje, cijena, kolicina, vrsta_tekucine) VALUES (1, 'Fanta', '01.01.2021', '01.01.2022', 2.5, 10, 'GAZIRANI');
+INSERT INTO napitci(id, ime, datum_isteka, datum_proizvodnje, cijena, kolicina, vrsta_tekucine) VALUES (2, 'Coca Cola', '02.02.2021', '02.02.2022', 2.20, 5, 'GAZIRANI');
+INSERT INTO napitci(id, ime, datum_isteka, datum_proizvodnje, cijena, kolicina, vrsta_tekucine) VALUES (3, '7 UP', '03.03.2021', '03.03.2022', 3.2, 20, 'GAZIRANI');
+INSERT INTO napitci(id, ime, datum_isteka, datum_proizvodnje, cijena, kolicina, vrsta_tekucine) VALUES (4, 'Cappy', '04.04.2021', '04.04.2022', 1.5, 10, 'NEGAZIRANI');
+INSERT INTO napitci(id, ime, datum_isteka, datum_proizvodnje, cijena, kolicina, vrsta_tekucine) VALUES (5, 'Fructal', '05.05.2021', '05.05.2022', 1.2, 40, 'NEGAZIRANI');
+INSERT INTO napitci VALUES (6, 'Jack Daniels', '06.06.2021', '06.06.2022', 20, 3, 'ALKOHOL');
+
+INSERT INTO odjeca(id, marka, boja, velicina, materijal, vrsta_odjece, cijena, kolicina, mjesto_porijekla) VALUES (100, 'Adidas', 'crvena', 'S', 'pamuk', 'Duks', 150.0, 5, 'Kina');
+INSERT INTO odjeca(id, marka, boja, velicina, materijal, vrsta_odjece, cijena, kolicina, mjesto_porijekla) VALUES (101, 'Nike', 'crna', 'XS', 'koza', 'Jakna', 200.0, 1, 'USA');
+INSERT INTO odjeca(id, marka, boja, velicina, materijal, vrsta_odjece, cijena, kolicina, mjesto_porijekla) VALUES (102, 'Puma', 'plava', 'M', 'pamuk', 'Duks', 120.0, 20, 'BiH');
+
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1000, 1, 100, null, 'Tuzla');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1001, 2, 101, null, 'Lukavac');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1002, 3, 102, null, 'Doboj');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1003, 4, 101, null, 'Tuzla');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1004, 5, 101, null, 'Sarajevo');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1005, 5, 102, null, 'Zivinice');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1006, 1, 101, null, 'Zenica');
+INSERT INTO radnja (id, fk_napitci, fk_odjeca, fk_hrana, poslovni_prostor) VALUES (1007, 3, 100, null, 'Mostar');
+
+SELECT * from radnja;
+
+SELECT n.ime, n.vrsta_tekucine, o.marka from radnja inner join napitci as n on n.id = radnja.fk_napitci inner join odjeca as o on o.id = fk_odjeca
+where poslovni_prostor = 'Lukavac';
+
+SELECT poslovni_prostor from radnja where poslovni_prostor is not null;
+
+select * from radnja where poslovni_prostor = 'Lukavac';
